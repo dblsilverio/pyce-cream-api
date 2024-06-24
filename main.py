@@ -1,69 +1,28 @@
 import logging
 from typing import Annotated
 
-import jwt
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
-from jwt import InvalidTokenError
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
 from infra import ice_repository
-from infra.database import Base, engine, SessionLocal
+from infra.database import Base, engine, get_db
+from infra.security import get_current_active_user
 from ucs.flavor.add_flavor import add_flavor
 from ucs.flavor.dtos import Flavor
 from ucs.flavor.list_flavors import list_flavors
-from ucs.token.create_token import create_access_token, SECRET_KEY, ALGORITHM
-from ucs.user.dtos import User, Token, TokenData
+from ucs.token.create_token import create_access_token
+from ucs.user.dtos import User, Token
 from ucs.user.find_user import find_user
 from ucs.user.password_hash import verify_password
 
 # SQLAlchemy create tables
 Base.metadata.create_all(bind=engine)
 
-#OAuth
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-
 app = FastAPI()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=401,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        token_data = TokenData(email=username)
-    except InvalidTokenError:
-        raise credentials_exception
-    user = find_user(db, token_data.email)
-    if user is None:
-        raise credentials_exception
-    return user
-
-
-async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)],
-):
-    if not current_user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
 
 
 @app.get("/")
