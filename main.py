@@ -5,11 +5,11 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from infra import ice_repository
 from infra.database import Base, engine, get_db
 from infra.security import get_current_active_user
 from ucs.flavor.add_flavor import add_flavor
 from ucs.flavor.dtos import Flavor
+from ucs.flavor.list_flavors import get_flavor as get_flavor_from_db
 from ucs.flavor.list_flavors import list_flavors
 from ucs.token.create_token import create_access_token
 from ucs.user.dtos import User, Token
@@ -32,7 +32,7 @@ async def root():
 
 @app.get("/flavors/{flavor_id}")
 async def get_flavor(flavor_id: int, db: Session = Depends(get_db)):
-    flavor = ice_repository.get_flavor(db, flavor_id)
+    flavor = get_flavor_from_db(db, flavor_id)
 
     if flavor is None:
         return JSONResponse({"message": f"Flavor id {flavor_id} not found"}, status_code=404)
