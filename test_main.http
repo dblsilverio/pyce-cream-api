@@ -18,6 +18,7 @@ Accept: application/json
 POST http://127.0.0.1:8000/flavors
 Accept: application/json
 Content-Type: application/json
+#Authorization: Bearer TOKEN
 
 {
   "name": "Chocolate",
@@ -25,4 +26,14 @@ Content-Type: application/json
   "description": "Rich and creamy chocolate flavour.",
   "price": 1.35,
   "available": true
+}
+
+###
+POST http://127.0.0.1:8000/users/token
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "alice@mail.com",
+  "password": "alice"
 }

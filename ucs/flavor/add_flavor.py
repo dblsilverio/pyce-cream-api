@@ -3,8 +3,7 @@ import logging
 from sqlalchemy.orm import Session
 
 from infra import ice_repository
-from ucs.dtos import Flavor, flavors
-
+from ucs.flavor.dtos import Flavor
 
 logger = logging.getLogger(__name__)
 

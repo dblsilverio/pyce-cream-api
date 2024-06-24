@@ -20,12 +20,6 @@ class Flavor(BaseModel):
         from_attributes = True
 
 
-class User(BaseModel):
-    id: PositiveInt = Field(..., gt=0)
-    email: EmailStr | None = None
-    hashed_password: str | None = None
-    is_active: bool
-
 # test flavors
 flavors = [
         Flavor(

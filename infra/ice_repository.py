@@ -3,7 +3,7 @@ import logging
 from sqlalchemy.orm import Session
 
 from models.flavor import Flavor as Entity, Flavor
-from ucs.dtos import Flavor as DTO
+from ucs.flavor.dtos import Flavor as DTO
 
 
 logger = logging.getLogger(__name__)
