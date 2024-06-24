@@ -1,0 +1,23 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/flavors
+Accept: application/json
+
+###
+
+POST http://127.0.0.1:8000/flavors
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Caramel - Diet",
+  "type": "diet",
+  "description": "Sweet and smooth caramel flavour - diet.",
+  "price": 2.9,
+  "available": true
+}
