@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel, Field, PositiveFloat
+from pydantic import BaseModel, Field, PositiveFloat, PositiveInt, EmailStr
 
 
 class Type(Enum):
@@ -9,13 +9,24 @@ class Type(Enum):
 
 
 class Flavor(BaseModel):
+    id: PositiveInt | None = Field(None, gt=0)
     name: str
     type: Type | None = Type.traditional
     description: str | None = None
     price: PositiveFloat = Field(..., gt=0.0)
     available: bool
 
+    class Config:
+        from_attributes = True
 
+
+class User(BaseModel):
+    id: PositiveInt = Field(..., gt=0)
+    email: EmailStr | None = None
+    hashed_password: str | None = None
+    is_active: bool
+
+# test flavors
 flavors = [
         Flavor(
             name="Vanilla",
