@@ -2,9 +2,10 @@ import logging
 from typing import Annotated
 
 from fastapi import Depends, APIRouter
+from fastapi.openapi.models import Response
+from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
 from sqlalchemy.orm import Session
-from starlette.responses import JSONResponse
 
 from infra.caching_keys import function_kwargs_builder
 from infra.database import get_db
@@ -14,7 +15,6 @@ from ucs.flavor.dtos import Flavor
 from ucs.flavor.list_flavors import get_flavor as get_flavor_from_db
 from ucs.flavor.list_flavors import list_flavors
 from ucs.user.dtos import User
-
 
 router = APIRouter(
     prefix="/flavors",
@@ -28,15 +28,10 @@ router = APIRouter(
 logger = logging.getLogger(__name__)
 
 
-@router.get("/")
-@cache(expire=5, key_builder=function_kwargs_builder)
+@router.get("/", response_model=list[Flavor] | None)
+@cache(expire=5, key_builder=function_kwargs_builder(''))
 async def flavors(db: Session = Depends(get_db)):
-    all_flavors = list_flavors(db)
-
-    if len(all_flavors) == 0:
-        return JSONResponse(status_code=204, content={})
-
-    return all_flavors
+    return list_flavors(db)
 
 @router.get("/{flavor_id}")
 @cache(expire=5, key_builder=function_kwargs_builder('flavor_id'))
