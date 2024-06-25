@@ -2,9 +2,11 @@ import logging
 from typing import Annotated
 
 from fastapi import Depends, APIRouter
+from fastapi_cache.decorator import cache
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
+from infra.caching_keys import function_kwargs_builder
 from infra.database import get_db
 from infra.security import get_current_active_user
 from ucs.flavor.add_flavor import add_flavor
@@ -27,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 @router.get("/")
+@cache(expire=5, key_builder=function_kwargs_builder)
 async def flavors(db: Session = Depends(get_db)):
     all_flavors = list_flavors(db)
 
@@ -36,6 +39,7 @@ async def flavors(db: Session = Depends(get_db)):
     return all_flavors
 
 @router.get("/{flavor_id}")
+@cache(expire=5, key_builder=function_kwargs_builder('flavor_id'))
 async def get_flavor(flavor_id: int, db: Session = Depends(get_db)):
     flavor = get_flavor_from_db(db, flavor_id)
 
