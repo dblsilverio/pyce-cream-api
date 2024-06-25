@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def find_user(db: Session, email: str):
-    user = db.query(Entity).filter(Entity.email == email).one()
+    user = db.query(Entity).filter(Entity.email == email).one_or_none()
 
     if user is None:
         logger.info(f'User {email} not found')

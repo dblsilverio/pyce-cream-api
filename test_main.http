@@ -34,8 +34,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "email": "bob@mail.com",
-  "password": "bob"
+  "email": "charlie@mail.com",
+  "password": "charlie"
 }
 
 ###
