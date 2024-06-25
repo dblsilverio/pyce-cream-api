@@ -15,4 +15,6 @@ def find_user(db: Session, email: str):
         logger.info(f'User {email} not found')
         return None
 
+    logger.info(f'User {email} found')
+
     return user

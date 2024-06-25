@@ -29,6 +29,16 @@ Content-Type: application/json
 }
 
 ###
+POST http://127.0.0.1:8000/users
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "bob@mail.com",
+  "password": "bob"
+}
+
+###
 POST http://127.0.0.1:8000/users/token
 Accept: application/json
 Content-Type: application/json

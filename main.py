@@ -15,6 +15,7 @@ from ucs.token.create_token import create_access_token
 from ucs.user.dtos import User, Token
 from ucs.user.find_user import find_user
 from ucs.user.password_hash import verify_password
+from ucs.user.create_user import create_user
 
 # SQLAlchemy create tables
 Base.metadata.create_all(bind=engine)
@@ -60,6 +61,18 @@ async def new_flavor(flavor: Flavor,
         return JSONResponse(status_code=409, content={'message': f'Flavor {flavor.name} already exists'})
 
     return JSONResponse(status_code=201, content={}, headers={'Location': f'/flavors/{added.id}'})
+
+
+@app.post("/users")
+async def add_user(user: User, db: Session = Depends(get_db)):
+    logger.info(f'Creating user {user.email}')
+
+    user_created = create_user(user, db)
+
+    if not user_created:
+        return JSONResponse(status_code=409, content={'message': f'User {user.email} already exists'})
+
+    return JSONResponse(status_code=201, content={})
 
 
 @app.post("/users/token")
