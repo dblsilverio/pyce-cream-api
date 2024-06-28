@@ -6,6 +6,13 @@ from starlette.responses import Response
 
 
 def function_kwargs_builder(*fields: str):
+    """
+    Provides an arbitrary number of keyword arguments to a cached function.
+    """
+
+    if fields is None:
+        fields = ('',)
+
     def key_builder(
         func,
         namespace: Optional[str] = "",

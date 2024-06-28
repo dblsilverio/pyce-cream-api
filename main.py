@@ -13,6 +13,7 @@ app = FastAPI()
 app.include_router(users_router.router)
 app.include_router(flavors_router.router)
 
+# Enabling caching module
 import infra.caching
 
 logging.basicConfig(level=logging.INFO)

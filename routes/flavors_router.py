@@ -2,7 +2,6 @@ import logging
 from typing import Annotated
 
 from fastapi import Depends, APIRouter
-from fastapi.openapi.models import Response
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
 from sqlalchemy.orm import Session
@@ -29,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 @router.get("/", response_model=list[Flavor] | None)
-@cache(expire=5, key_builder=function_kwargs_builder(''))
+@cache(expire=5, key_builder=function_kwargs_builder())
 async def flavors(db: Session = Depends(get_db)):
     return list_flavors(db)
 

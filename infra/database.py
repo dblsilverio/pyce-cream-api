@@ -13,6 +13,14 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def get_db():
+    """
+    Method used to get a SQLAlchemy database session.
+
+    FastApi will inject this into a method parameter via:<br/>
+        <i>db: Session = Depends(get_db)</i>
+
+    :return: SessionLocal db session
+    """
     db = SessionLocal()
     try:
         yield db

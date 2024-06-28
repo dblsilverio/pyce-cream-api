@@ -3,8 +3,9 @@
 ## Main Components
 
 * Python 12.x
-* Fastapi 0.111.x
-* SQLAlchemy 2.x
+* [FastApi 0.111.x](https://fastapi.tiangolo.com/tutorial/)
+* [FastApi - Cache 0.2.1](https://pypi.org/project/fastapi-cache2/)
+* [SQLAlchemy 2.x](https://docs.sqlalchemy.org/en/20/contents.html)
 
 ## Configuring Environment
 
